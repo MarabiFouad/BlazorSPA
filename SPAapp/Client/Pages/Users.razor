@@ -1,0 +1,124 @@
+﻿@page "/users"
+
+@inject HttpClient http
+<h3>Users</h3>
+<div class="row">
+    <div class="col-6 m-0 p-0">
+        @if (!IsLoaded)
+        {
+            <Loading></Loading>
+        }
+        @if (UserData != null)
+        {<table class="table table-bordered">
+                <thead>
+                    <tr>
+
+                        <th>id</th>
+                        <th>email</th>
+                        <th>first name</th>
+                        <th>last name</th>
+                        <th>avatar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in UserData.data)
+                    {
+                        <tr>
+                            <td>@user.id</td>
+                            <td>@user.email</td>
+                            <td>@user.first_name</td>
+                            <td>@user.last_name</td>
+                            <td>
+                                <img src="@user.avatar" @onload="@(async () => { user.IsLoaded = true; })" />
+                                @if (!user.IsLoaded)
+                                {
+                                    <Loading AddtionalClasses="moredarkerloader"></Loading>
+                                }
+                            </td>
+                        </tr>
+
+                    }
+                    <tr>
+                        <td colspan="5">
+                            <nav aria-label="...">
+                                <ul class="pagination">
+                                    <li class="page-item @(currentPage <= 1 ? "disabled" : "")">
+                                        <NavLink class="page-link" tabindex="-1" @onclick="@(() => GetData(currentPage - 1))">Previous</NavLink>
+                                    </li>
+                                    @for (int pageIndex = 1; pageIndex <= UserData.total_pages; pageIndex++)
+                                    {
+                                        int pagenum = pageIndex;
+                                        if (pagenum == currentPage)
+                                        {
+                                            <li class="page-item active">
+                                                <NavLink class="page-link">@pagenum</NavLink>
+                                            </li>
+                                        }
+                                        else
+                                        {
+
+                                            <li class="page-item"><NavLink class="page-link" @onclick="@(() => GetData(pagenum))">@pagenum</NavLink></li>
+                                        }
+                                    }
+                                    <li class="page-item  @(currentPage >= UserData.total_pages ? "disabled" : "")">
+                                        <NavLink class="page-link" @onclick="@(() => GetData(currentPage + 1))">Next</NavLink>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        }
+    </div>
+</div>
+@code {
+
+    private bool IsLoaded { get; set; } = false;
+
+    private int currentPage { get; set; }
+
+    private PagedData UserData;
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData(1);
+    }
+
+
+    private async Task GetData(int pagenum)
+    {
+        IsLoaded = false;
+        currentPage = pagenum;
+        Console.WriteLine(pagenum);
+        UserData = await http.GetFromJsonAsync<PagedData>($"https://reqres.in/api/users?page={pagenum}");
+        IsLoaded = true;
+    }
+
+
+
+    public class PagedData
+    {
+        public int page { get; set; }
+        public int per_page { get; set; }
+        public int total { get; set; }
+        public int total_pages { get; set; }
+
+        public User[] data { get; set; }
+
+
+        public class User
+        {
+            public int id { get; set; }
+            public string email { get; set; }
+            public string first_name { get; set; }
+            public string last_name { get; set; }
+            public string avatar { get; set; }
+            public bool IsLoaded { get; set; }
+
+        }
+
+    }
+
+
+}
