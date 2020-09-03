@@ -90,7 +90,6 @@
     {
         IsLoaded = false;
         currentPage = pagenum;
-        Console.WriteLine(pagenum);
         UserData = await http.GetFromJsonAsync<PagedData>($"https://reqres.in/api/users?page={pagenum}");
         IsLoaded = true;
     }

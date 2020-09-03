@@ -12,6 +12,7 @@ namespace SPAapp.Server.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -36,5 +37,15 @@ namespace SPAapp.Server.Controllers
             })
             .ToArray();
         }
+
+        [HttpGet("[action]")]
+        public async Task<string> Waiting()
+        {
+
+            await Task.Delay(1000);
+
+            return ("Still waiting");
+        }
+        
     }
 }

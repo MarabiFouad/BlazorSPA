@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAapp.Server", "SPAapp\Server\SPAapp.Server.csproj", "{4D839461-A643-4A7E-A68D-C3378A612C79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPAapp.Server", "SPAapp\Server\SPAapp.Server.csproj", "{4D839461-A643-4A7E-A68D-C3378A612C79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAapp.Client", "SPAapp\Client\SPAapp.Client.csproj", "{846B4929-BB8F-4555-80C2-FF5B3400D474}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPAapp.Client", "SPAapp\Client\SPAapp.Client.csproj", "{846B4929-BB8F-4555-80C2-FF5B3400D474}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAapp.Shared", "SPAapp\Shared\SPAapp.Shared.csproj", "{95B925EF-5C2B-498C-BFFC-156930C83F12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPAapp.Shared", "SPAapp\Shared\SPAapp.Shared.csproj", "{95B925EF-5C2B-498C-BFFC-156930C83F12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,39 @@
+﻿@inject HttpClient http
+<h3>Search</h3>
+
+<input type="text" class="form-control" placeholder="Search among countries by name" @oninput="@((ChangeEventArgs e)=>SearchCountry(e))" />
+@if (Countries.Any())
+{
+    @foreach (var country in Countries)
+    {
+        <span class="badge badge-light">@country.name</span>
+    }
+}
+
+@code {
+
+    private string EnteredValue { get; set; } = string.Empty;
+    private IEnumerable<Country> Countries = new List<Country>();
+
+    private async Task SearchCountry(ChangeEventArgs e)
+    {
+        if (e.Value is null) return;
+        string val = e.Value.ToString();
+        var res = await http.GetAsync($"https://restcountries.eu/rest/v2/name/{val}");
+        if (res.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            Countries = new List<Country>();
+        }
+        else
+            Countries = await res.Content.ReadFromJsonAsync<Country[]>();
+
+
+    }
+
+    public class Country
+    {
+        public string name { get; set; }
+        public string capital { get; set; }
+        public string region { get; set; }
+    }
+}
