@@ -1,11 +1,13 @@
 ﻿@inject HttpClient http
 @using System.Threading
+@using System.Linq
 <h3>Search</h3>
 
 
 <div class="row">
     <div class="col-md-12">
         <input type="text" class="form-control" placeholder="Search among countries by name" @oninput="@((ChangeEventArgs e)=>SearchCountry(e))" />
+        <button type="button" @onclick="OnSubmit">Show Selected</button>
     </div>
     @if (IsLoaded)
     {
@@ -15,8 +17,8 @@
             <div class="col-md-12 overflow-auto shadow bg-light" style="max-height:400px;">
                 @foreach (var country in Countries)
                 {
-                    <div>
-                        <label><input type="checkbox" name="@country.name" /> @country.name</label>
+                    <div class="@country.ItemStyle searchitem">
+                        <label class="m-0 p-2 d-block"><input type="checkbox" @onchange="@((ChangeEventArgs e)=> OnItemChange(e,country))" name="@country.name" /> @country.name</label>
                     </div>
                 }
             </div>
@@ -31,13 +33,25 @@
 </div>
 
 
+
 @code {
 
     private string EnteredValue { get; set; } = string.Empty;
     private bool IsLoaded { get; set; } = true;
     private IEnumerable<Country> Countries = new List<Country>();
-
     CancellationTokenSource currentSearchCts;
+
+    private void OnSubmit()
+    {
+        var selectedCountries = Countries.Where(x => x.IsSelected).ToList();
+        selectedCountries.ForEach((x) => Console.WriteLine(x.name));
+    }
+
+    private void OnItemChange(ChangeEventArgs e, Country c)
+    {
+        c.IsSelected = (bool)e.Value;
+        c.ItemStyle = c.IsSelected ? "bg-danger text-white" : "";
+    }
 
     private void ClearCountries()
     {
@@ -47,7 +61,7 @@
     {
         try
         {
-            if (e.Value is null) ClearCountries();
+            if (string.IsNullOrEmpty(e.Value?.ToString())) { ClearCountries(); return; }
 
             currentSearchCts?.Cancel();
             currentSearchCts = new CancellationTokenSource();
@@ -77,7 +91,7 @@
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine(ex.Message);
+            //Console.Error.WriteLine(ex.Message);
         }
     }
 
@@ -86,5 +100,8 @@
         public string name { get; set; }
         public string capital { get; set; }
         public string region { get; set; }
+        public bool IsSelected { get; set; }
+        public string ItemStyle { get; set; }
+
     }
 }

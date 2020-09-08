@@ -235,7 +235,7 @@ app {
     animation-iteration-count: infinite;
     animation-name: orbit;
     animation-duration: 5.5s;
-    z-index:11;
+    z-index: 11;
 }
 
     .loader .circle:after {
@@ -316,12 +316,16 @@ app {
     height: 100%;
     z-index: 10;
     background-color: rgba(0,0,0,0.06);
-    
 }
 
 .table td {
     position: relative;
 }
+
 .moredarkerloader {
     background-color: rgba(0,0,0,0.3);
+}
+
+.searchitem:hover {
+    background-color: rgba(249, 172, 172, 0.06);
 }
